@@ -11,18 +11,15 @@ public class CriarTela {
 	public void pegarDados() {
 
 		// pegar as informações do usuário
-		System.out.print("Digite um IP (ex: 192.168.0.0): ");
-		ipInfo.setIp(leitor.next());
-
-		System.out.print("Digite uma máscara CIDR (ex: 24): ");
-		ipInfo.setCidr(leitor.nextInt());
-
+		System.out.print("Digite um IP com CDR (ex: 192.168.0.0/24): ");
+		ipInfo.setIpCidr(leitor.next());
 		leitor.close();
 
 	}
 
 	public void mostrarDados() {
 		
+		ipInfo.separarIpCidr();
 		ipInfo.calcularClasse();
 		ipInfo.calcularMascaraDecimal();
 
