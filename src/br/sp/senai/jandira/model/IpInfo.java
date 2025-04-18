@@ -42,16 +42,8 @@ public class IpInfo {
 		return mascaraBinaria;
 	}
 
-	public void setMascaraBinaria(String mascaraBinaria) {
-		this.mascaraBinaria = mascaraBinaria;
-	}
-
 	public int getQuantidadeIps() {
 		return quantidadeIps;
-	}
-
-	public void setQuantidadeIps(int quantidadeIps) {
-		this.quantidadeIps = quantidadeIps;
 	}
 	
 	// separar o id e cidr dados pelo usuario para facilitar os calculos
@@ -89,14 +81,15 @@ public class IpInfo {
 		int contador = 0;
 		int valorDecimal = 0;
 		int aux = 8;
+		int cidrTemp = cidr;
 
 		// atribuir os bits aos octetos
-		if (cidr >= 1 && cidr <= 32) {
+		if (cidrTemp >= 1 && cidrTemp <= 32) {
 
-			while (octeto[contador] < 8 && cidr != 0) {
+			while (octeto[contador] < 8 && cidrTemp != 0) {
 
 				octeto[contador]++;
-				cidr--;
+				cidrTemp--;
 
 				if (octeto[contador] == 8) {
 					contador++;
@@ -138,6 +131,79 @@ public class IpInfo {
 	}
 	
 	public void calcularMascaraBinaria() {
+
+			int[] octeto = { 0, 0, 0, 0 };
+			String[] valoresOcteto = { "", "", "", "" };
+			int contador = 0;
+			String valorBinario = "";
+
+			// atribuir os bits aos octetos
+			if (cidr >= 1 && cidr <= 32) {
+
+				while (octeto[contador] < 8 && cidr != 0) {
+
+					octeto[contador]++;
+					cidr--;
+
+					if (octeto[contador] == 8) {
+						contador++;
+					}
+
+				}
+				
+				contador = 3;
+				int[] temp = {0, 0, 0, 0};
+				
+				while(contador > -1) {
+					
+					temp[contador] = octeto[contador];
+					
+					contador--;
+					
+				}
+
+				// zerar o contador
+				contador = 0;
+
+				// transformar os bits em binario
+				while (octeto[contador] > 0) {
+
+					valorBinario = valorBinario + "1";
+					octeto[contador]--;
+
+					if (octeto[contador] == 0) {
+						
+						
+						if (temp[contador] < 8) {
+							
+							int contadorBinario = 8 - temp[contador];
+							
+							while (contadorBinario > 0) {
+								valorBinario = valorBinario + "0";
+								contadorBinario--;
+							}
+							
+						}
+						
+						valoresOcteto[contador] = valorBinario;
+						
+						valorBinario = "";
+						contador++;
+					}
+
+					if (octeto[0] == 0 && octeto[1] == 0 && octeto[2] == 0 && octeto[3] == 0) {
+						contador = 3;
+					}
+
+				}
+				
+				mascaraBinaria = valoresOcteto[0] + " " + valoresOcteto[1] + " " + valoresOcteto[2] + " " + valoresOcteto[3];
+
+			} else {
+
+				mascaraBinaria = "Valor inválido!";
+
+			}
 		
 	}
 
