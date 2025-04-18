@@ -9,7 +9,7 @@ public class IpInfo {
 	private String mascaraDecimal;
 	private String mascaraBinaria;
 	private int quantidadeIps;
-	
+
 	public void setIpCidr(String ipCidr) {
 		this.ipCidr = ipCidr;
 	}
@@ -45,15 +45,18 @@ public class IpInfo {
 	public int getQuantidadeIps() {
 		return quantidadeIps;
 	}
-	
+
 	// separar o id e cidr dados pelo usuario para facilitar os calculos
 	public void separarIpCidr() {
-		
+
 		String[] temp = ipCidr.split("/");
 		ip = temp[0];
-		
+
 		cidr = Integer.parseInt(temp[1]);
-		
+
+		// guardar o cidr para utilizar no calculo da quantidade de ips que estarão disponiveis
+		quantidadeIps = cidr;
+
 	}
 
 	public void calcularClasse() {
@@ -129,82 +132,108 @@ public class IpInfo {
 		}
 
 	}
-	
+
 	public void calcularMascaraBinaria() {
 
-			int[] octeto = { 0, 0, 0, 0 };
-			String[] valoresOcteto = { "", "", "", "" };
-			int contador = 0;
-			String valorBinario = "";
+		int[] octeto = { 0, 0, 0, 0 };
+		String[] valoresOcteto = { "", "", "", "" };
+		int contador = 0;
+		String valorBinario = "";
 
-			// atribuir os bits aos octetos
-			if (cidr >= 1 && cidr <= 32) {
+		// atribuir os bits aos octetos
+		if (cidr >= 1 && cidr <= 32) {
 
-				while (octeto[contador] < 8 && cidr != 0) {
+			while (octeto[contador] < 8 && cidr != 0) {
 
-					octeto[contador]++;
-					cidr--;
+				octeto[contador]++;
+				cidr--;
 
-					if (octeto[contador] == 8) {
-						contador++;
-					}
-
+				if (octeto[contador] == 8) {
+					contador++;
 				}
-				
-				contador = 3;
-				int[] temp = {0, 0, 0, 0};
-				
-				while(contador > -1) {
-					
-					temp[contador] = octeto[contador];
-					
-					contador--;
-					
-				}
-
-				// zerar o contador
-				contador = 0;
-
-				// transformar os bits em binario
-				while (octeto[contador] > 0) {
-
-					valorBinario = valorBinario + "1";
-					octeto[contador]--;
-
-					if (octeto[contador] == 0) {
-						
-						
-						if (temp[contador] < 8) {
-							
-							int contadorBinario = 8 - temp[contador];
-							
-							while (contadorBinario > 0) {
-								valorBinario = valorBinario + "0";
-								contadorBinario--;
-							}
-							
-						}
-						
-						valoresOcteto[contador] = valorBinario;
-						
-						valorBinario = "";
-						contador++;
-					}
-
-					if (octeto[0] == 0 && octeto[1] == 0 && octeto[2] == 0 && octeto[3] == 0) {
-						contador = 3;
-					}
-
-				}
-				
-				mascaraBinaria = valoresOcteto[0] + " " + valoresOcteto[1] + " " + valoresOcteto[2] + " " + valoresOcteto[3];
-
-			} else {
-
-				mascaraBinaria = "Valor inválido!";
 
 			}
-		
+
+			// responsavel por auxiliar na adição dos zeros
+			contador = 3;
+			int[] temp = { 0, 0, 0, 0 };
+
+			while (contador > -1) {
+
+				temp[contador] = octeto[contador];
+
+				contador--;
+
+			}
+
+			// zerar o contador
+			contador = 0;
+
+			// transformar os bits em binario
+			while (octeto[contador] > 0) {
+
+				valorBinario = valorBinario + "1";
+				octeto[contador]--;
+
+				// passagem para o próximo octeto
+				if (octeto[contador] == 0) {
+
+					// adicionar os zeros no octeto
+					if (temp[contador] < 8) {
+
+						int contadorBinario = 8 - temp[contador];
+
+						while (contadorBinario > 0) {
+							valorBinario = valorBinario + "0";
+							contadorBinario--;
+						}
+
+					}
+
+					valoresOcteto[contador] = valorBinario;
+
+					valorBinario = "";
+					contador++;
+				}
+
+				if (octeto[0] == 0 && octeto[1] == 0 && octeto[2] == 0 && octeto[3] == 0) {
+					contador = 3;
+				}
+
+			}
+
+			// estrutura responsavel por atribuir os zeros para os octetos sem bits ativos
+			if (valoresOcteto[1] == "") {
+				valoresOcteto[1] = "00000000";
+				valoresOcteto[2] = "00000000";
+				valoresOcteto[3] = "00000000";
+			}
+
+			mascaraBinaria = valoresOcteto[0] + " " + valoresOcteto[1] + " " + valoresOcteto[2] + " " + valoresOcteto[3];
+
+		} else {
+
+			mascaraBinaria = "Valor inválido!";
+
+		}
+
+	}
+
+	public void calcularTotalIps() {
+
+		// é preciso definir a quantidade de ips quando o cidr é 1 pois o máximo que um tipo int
+		// é capaz de guardar é 2147483647, e acaba dando erro quando vai subtrair 2 dos ips
+		if (quantidadeIps == 1) {
+			quantidadeIps = 2147483646;
+		}
+
+		// duvida para perguntar para o professor: o que acontece quando o cidr é 32?
+		if (quantidadeIps > 1 && quantidadeIps <= 32) {
+
+			quantidadeIps = (int) Math.pow(2, 32 - quantidadeIps) - 2;
+
+		}
+
 	}
 
 }

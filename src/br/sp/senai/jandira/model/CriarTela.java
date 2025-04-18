@@ -23,6 +23,7 @@ public class CriarTela {
 		ipInfo.calcularClasse();
 		ipInfo.calcularMascaraDecimal();
 		ipInfo.calcularMascaraBinaria();
+		ipInfo.calcularTotalIps();
 
 		// mostrar os dados na tela
 		System.out.println("----- INFORMAÇÕES DA REDE -----");
@@ -30,7 +31,7 @@ public class CriarTela {
 		System.out.println("Classe do IP: " + ipInfo.getClasse());
 		System.out.println("Máscara (decimal): " + ipInfo.getMascaraDecimal());
 		System.out.println("Máscara (binária): " + ipInfo.getMascaraBinaria());
-		System.out.println("Total de IPs disponíveis: ");
+		System.out.println("Total de IPs disponíveis: " + ipInfo.getQuantidadeIps());
 
 	}
 
