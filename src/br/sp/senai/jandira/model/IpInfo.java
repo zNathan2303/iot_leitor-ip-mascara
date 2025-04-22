@@ -8,7 +8,7 @@ public class IpInfo {
 	private String classe;
 	private String mascaraDecimal;
 	private String mascaraBinaria;
-	private int quantidadeIps;
+	private String quantidadeIps;
 
 	public void setIpCidr(String ipCidr) {
 		this.ipCidr = ipCidr;
@@ -42,7 +42,7 @@ public class IpInfo {
 		return mascaraBinaria;
 	}
 
-	public int getQuantidadeIps() {
+	public String getQuantidadeIps() {
 		return quantidadeIps;
 	}
 
@@ -53,10 +53,6 @@ public class IpInfo {
 		ip = temp[0];
 
 		cidr = Integer.parseInt(temp[1]);
-
-		// guardar o cidr para utilizar no calculo da quantidade de ips que estarão disponiveis
-		quantidadeIps = cidr;
-
 	}
 
 	public void calcularClasse() {
@@ -71,7 +67,7 @@ public class IpInfo {
 		} else if (primeiroOcteto >= 192 && primeiroOcteto <= 223) {
 			classe = "Classe C";
 		} else {
-			classe = "Valor inválido!";
+			classe = "IP inválido!";
 		}
 
 	}
@@ -86,9 +82,9 @@ public class IpInfo {
 		int aux = 8;
 		int cidrTemp = cidr;
 
-		// atribuir os bits aos octetos
+		
 		if (cidrTemp >= 1 && cidrTemp <= 32) {
-
+			// atribuir os bits aos octetos
 			while (octeto[contador] < 8 && cidrTemp != 0) {
 
 				octeto[contador]++;
@@ -127,7 +123,7 @@ public class IpInfo {
 
 		} else {
 
-			mascaraDecimal = "Valor inválido!";
+			mascaraDecimal = "CIDR inválido!";
 
 		}
 
@@ -139,14 +135,15 @@ public class IpInfo {
 		String[] valoresOcteto = { "", "", "", "" };
 		int contador = 0;
 		String valorBinario = "";
+		int cidrTemp = cidr;
 
 		// atribuir os bits aos octetos
-		if (cidr >= 1 && cidr <= 32) {
+		if (cidrTemp >= 1 && cidrTemp <= 32) {
 
-			while (octeto[contador] < 8 && cidr != 0) {
+			while (octeto[contador] < 8 && cidrTemp != 0) {
 
 				octeto[contador]++;
-				cidr--;
+				cidrTemp--;
 
 				if (octeto[contador] == 8) {
 					contador++;
@@ -208,30 +205,44 @@ public class IpInfo {
 				valoresOcteto[2] = "00000000";
 				valoresOcteto[3] = "00000000";
 			}
+			
+			if (valoresOcteto[2] == "") {
+				valoresOcteto[2] = "00000000";
+				valoresOcteto[3] = "00000000";
+			}
+			
+			if (valoresOcteto[3] == "") {
+				valoresOcteto[3] = "00000000";
+			}
 
 			mascaraBinaria = valoresOcteto[0] + " " + valoresOcteto[1] + " " + valoresOcteto[2] + " " + valoresOcteto[3];
 
 		} else {
 
-			mascaraBinaria = "Valor inválido!";
+			mascaraBinaria = "CIDR inválido!";
 
 		}
 
 	}
 
 	public void calcularTotalIps() {
+		
+		int quantidadeIpsTemp = cidr;
+		if (quantidadeIpsTemp >= 1 && quantidadeIpsTemp <= 30) {
+			
+			// é preciso definir a quantidade de ips quando o cidr é 1 pois o máximo que um tipo int
+			// é capaz de guardar é 2147483647, e acaba dando erro quando vai subtrair 2 dos ips
+			if (quantidadeIpsTemp == 1) {
+				quantidadeIps = "2147483646";
+			}
 
-		// é preciso definir a quantidade de ips quando o cidr é 1 pois o máximo que um tipo int
-		// é capaz de guardar é 2147483647, e acaba dando erro quando vai subtrair 2 dos ips
-		if (quantidadeIps == 1) {
-			quantidadeIps = 2147483646;
-		}
-
-		// duvida para perguntar para o professor: o que acontece quando o cidr é 32?
-		if (quantidadeIps > 1 && quantidadeIps <= 32) {
-
-			quantidadeIps = (int) Math.pow(2, 32 - quantidadeIps) - 2;
-
+			// para ter ips disponiveis, o cidr precisa ser no máximo de 30
+			if (quantidadeIpsTemp > 1 && quantidadeIpsTemp <= 30) {
+				quantidadeIps = String.valueOf((int) Math.pow(2, 32 - quantidadeIpsTemp) - 2);
+			}
+			
+		} else {
+			quantidadeIps = "O CIDR precisa ir de 1 até 30 para ter ips disponíveis!";
 		}
 
 	}
