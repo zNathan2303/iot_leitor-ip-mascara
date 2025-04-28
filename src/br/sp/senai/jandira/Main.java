@@ -9,12 +9,6 @@ public class Main {
 		CriarTela tela = new CriarTela();
 		tela.criarTela();
 		
-		/*
-		tela.pegarDados();
-		tela.mostrarDados();
-		
-		*/
-		
 	}
 	
 }
