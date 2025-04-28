@@ -3,8 +3,6 @@ package br.sp.senai.jandira.model;
 public class Ip {
 
 	private String ip;
-	private String classe;
-	private String subRedes;
 
 	public String getIp() {
 		return ip;
@@ -14,42 +12,9 @@ public class Ip {
 		this.ip = ip;
 	}
 
-	// separar o id e cidr dados pelo usuario para facilitar os calculos
-	public String pegarIp() {
-		
-		boolean validar;
-		try {
-			String[] temp = ip.split("/");
-			validar = true;
-		} catch(Exception e) {
-			validar = false;
-		}
-
-		if (validar) {
-			String[] temp = ip.split("/");
-			ip = temp[0];
-			return ip;
-
-		} else {
-			return "Erro! Não foi digitado uma barra!";
-		}
-		
-	}
-
 	public String calcularClasse() {
-		
-		boolean validar;
-		try {
-			String[] octetos = ip.split("\\.");
-			validar = true;
-		} catch(Exception e) {
-			validar = false;
-		}
-		
-		if (validar) {
-			
-			String[] octetos = ip.split("\\.");
-			int primeiroOcteto = Integer.parseInt(octetos[0]);
+
+			int primeiroOcteto = Integer.parseInt(ip);
 
 			if (primeiroOcteto >= 0 && primeiroOcteto <= 127) {
 				return "Classe A";
@@ -60,51 +25,23 @@ public class Ip {
 			} else {
 				return "Erro! O primeiro octeto do IP precisa ir de 0 até 223!";
 			}
-			
-		} else {
-			
-			return "Erro! O IP precisa ter pontos separado os octetos!";
-			
-		}
-
-		
 
 	}
-	
+
 	public String calcularSubRedes() {
-		
-		boolean validar;
-		try {
-			String[] octetos = ip.split("\\.");
-			validar = true;
-		} catch(Exception e) {
-			validar = false;
-		}
-		
-		if (validar) {
-			
-			String[] octetos = ip.split("\\.");
-			int primeiroOcteto = Integer.parseInt(octetos[0]);
+
+			int primeiroOcteto = Integer.parseInt(ip);
 
 			if (primeiroOcteto >= 0 && primeiroOcteto <= 127) {
-				return subRedes = "8";
+				return "8";
 			} else if (primeiroOcteto >= 128 && primeiroOcteto <= 191) {
-				return subRedes = "16";
+				return "16";
 			} else if (primeiroOcteto >= 192 && primeiroOcteto <= 223) {
-				return subRedes = "24";
+				return "24";
 			} else {
-				return subRedes = "Erro! O primeiro octeto do IP precisa ir de 0 até 223!";
+				return "Erro! O primeiro octeto do IP precisa ir de 0 até 223!";
 			}
-			
-		} else {
-			
-			return classe = "Erro! O IP precisa ter pontos separado os octetos!";
-			
-		}
-		
-		
+
 	}
-	
-	
 
 }

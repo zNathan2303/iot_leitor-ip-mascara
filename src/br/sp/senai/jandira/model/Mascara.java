@@ -1,19 +1,12 @@
 package br.sp.senai.jandira.model;
 
 public class Mascara {
-
-	private String cidrString;
+	
 	private int cidr;
-	private String mascaraDecimal;
-	private String mascaraBinaria;
 	private String quantidadeIps;
 
 	public int getCidr() {
 		return cidr;
-	}
-
-	public void setCidrString(String cidrString) {
-		this.cidrString = cidrString;
 	}
 
 	public void setCidr(int cidr) {
@@ -22,14 +15,6 @@ public class Mascara {
 
 	public String getQuantidadeIps() {
 		return quantidadeIps;
-	}
-	
-	public String pegarCidr() {
-
-		String[] temp = cidrString.split("/");
-
-		cidr = Integer.parseInt(temp[1]);
-		return String.valueOf(cidr);
 	}
 
 	public String calcularMascaraDecimal() {
@@ -78,12 +63,12 @@ public class Mascara {
 
 			}
 
-			return mascaraDecimal = valoresOcteto[0] + "." + valoresOcteto[1] + "." + valoresOcteto[2] + "."
+			return valoresOcteto[0] + "." + valoresOcteto[1] + "." + valoresOcteto[2] + "."
 					+ valoresOcteto[3];
 
 		} else {
 
-			return mascaraDecimal = "CIDR inválido!";
+			return "CIDR inválido!";
 
 		}
 
@@ -116,11 +101,8 @@ public class Mascara {
 			int[] temp = { 0, 0, 0, 0 };
 
 			while (contador > -1) {
-
 				temp[contador] = octeto[contador];
-
 				contador--;
-
 			}
 
 			// zerar o contador
@@ -148,7 +130,6 @@ public class Mascara {
 					}
 
 					valoresOcteto[contador] = valorBinario;
-
 					valorBinario = "";
 					contador++;
 				}
@@ -175,12 +156,12 @@ public class Mascara {
 				valoresOcteto[3] = "00000000";
 			}
 
-			return mascaraBinaria = valoresOcteto[0] + " " + valoresOcteto[1] + " " + valoresOcteto[2] + " "
+			return valoresOcteto[0] + " " + valoresOcteto[1] + " " + valoresOcteto[2] + " "
 					+ valoresOcteto[3];
 
 		} else {
 
-			return mascaraBinaria = "CIDR inválido!";
+			return "CIDR inválido!";
 
 		}
 
