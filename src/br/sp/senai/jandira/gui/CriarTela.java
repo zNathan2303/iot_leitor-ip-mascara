@@ -40,7 +40,7 @@ public class CriarTela {
 	public void criarTela() {
 
 		JFrame tela = new JFrame();
-		tela.setSize(395, 500);
+		tela.setSize(395, 490);
 		tela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		tela.setTitle("Informações da rede");
 
@@ -123,37 +123,37 @@ public class CriarTela {
 
 		labelIp = new JLabel();
 		labelIp.setText("IP: ");
-		labelIp.setBounds(20, 150, 460, 30);
+		labelIp.setBounds(20, 160, 460, 30);
 		labelIp.setFont(new Font("Arial", Font.BOLD, 12));
 
 		labelCidr = new JLabel();
 		labelCidr.setText("CIDR: ");
-		labelCidr.setBounds(20, 190, 460, 30);
+		labelCidr.setBounds(20, 200, 460, 30);
 		labelCidr.setFont(new Font("Arial", Font.BOLD, 12));
 
 		labelClasse = new JLabel();
 		labelClasse.setText("Classe do IP: ");
-		labelClasse.setBounds(20, 230, 460, 30);
+		labelClasse.setBounds(20, 240, 460, 30);
 		labelClasse.setFont(new Font("Arial", Font.BOLD, 12));
 
 		labelMascaraDecimal = new JLabel();
 		labelMascaraDecimal.setText("Máscara decimal: ");
-		labelMascaraDecimal.setBounds(20, 270, 460, 30);
+		labelMascaraDecimal.setBounds(20, 280, 460, 30);
 		labelMascaraDecimal.setFont(new Font("Arial", Font.BOLD, 12));
 
 		labelMascaraBinaria = new JLabel();
 		labelMascaraBinaria.setText("Máscara binária: ");
-		labelMascaraBinaria.setBounds(20, 310, 460, 30);
+		labelMascaraBinaria.setBounds(20, 320, 460, 30);
 		labelMascaraBinaria.setFont(new Font("Arial", Font.BOLD, 12));
 
 		labelIpsDisponiveis = new JLabel();
 		labelIpsDisponiveis.setText("Total de IPs disponíveis: ");
-		labelIpsDisponiveis.setBounds(20, 350, 460, 30);
+		labelIpsDisponiveis.setBounds(20, 360, 460, 30);
 		labelIpsDisponiveis.setFont(new Font("Arial", Font.BOLD, 12));
 
 		labelSubRedes = new JLabel();
 		labelSubRedes.setText("Sub-redes: ");
-		labelSubRedes.setBounds(20, 390, 460, 30);
+		labelSubRedes.setBounds(20, 400, 460, 30);
 		labelSubRedes.setFont(new Font("Arial", Font.BOLD, 12));
 
 		tela.getContentPane().add(labelIpCidr);
@@ -191,76 +191,112 @@ public class CriarTela {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				boolean validador1;
+				labelIp.setVisible(false);
+				labelCidr.setVisible(false);
+				labelClasse.setVisible(false);
+				labelMascaraDecimal.setVisible(false);
+				labelMascaraBinaria.setVisible(false);
+				labelIpsDisponiveis.setVisible(false);
+				labelSubRedes.setVisible(false);
 
-				try {
-					int teste1 = Integer.parseInt(textOcteto1.getText());
-					int teste2 = Integer.parseInt(textOcteto2.getText());
-					int teste3 = Integer.parseInt(textOcteto3.getText());
-					int teste4 = Integer.parseInt(textOcteto4.getText());
-					validador1 = true;
-				} catch (Exception testeNumeroIp) {
-					validador1 = false;
-				}
+				String[] temp = { textOcteto1.getText(), textOcteto2.getText(), textOcteto3.getText(),
+						textOcteto4.getText(), textCidr.getText() };
 
-				if (validador1) {
+				if (temp[0] != null || temp[1] != null || temp[2] != null || temp[3] != null || temp[4] != null) {
 
-					boolean validador2;
+					boolean testeIpNumero;
 
 					try {
-						int teste5 = Integer.parseInt(textCidr.getText());
-						validador2 = true;
-					} catch (Exception testeNumeroIp) {
-						validador2 = false;
-					}
-
-					if (validador2) {
-
 						int teste1 = Integer.parseInt(textOcteto1.getText());
 						int teste2 = Integer.parseInt(textOcteto2.getText());
 						int teste3 = Integer.parseInt(textOcteto3.getText());
 						int teste4 = Integer.parseInt(textOcteto4.getText());
+						testeIpNumero = true;
+					} catch (Exception testeNumeroIp) {
+						testeIpNumero = false;
+					}
 
-						if (teste1 >= 0 && teste1 <= 255 && teste2 >= 0 && teste2 <= 255 && teste3 >= 0 && teste3 <= 255
-								&& teste4 >= 0 && teste4 <= 255) {
+					if (testeIpNumero) {
 
-							Ip ipInfo = new Ip();
-							ipInfo.setIp(textOcteto1.getText());
+						boolean testeCidrNumero;
 
-							Mascara mask = new Mascara();
-							mask.setCidr(Integer.parseInt(textCidr.getText()));
-							mask.calcularTotalIps();
+						try {
+							int teste5 = Integer.parseInt(textCidr.getText());
+							testeCidrNumero = true;
+						} catch (Exception testeNumero) {
+							testeCidrNumero = false;
+						}
 
-							labelIp.setText("IP: " + textOcteto1.getText() + "." + textOcteto2.getText() + "."
-									+ textOcteto3.getText() + "." + textOcteto4.getText());
-							labelCidr.setText("CIDR: " + mask.getCidr());
-							labelClasse.setText("Classe do IP: " + ipInfo.calcularClasse());
-							labelMascaraDecimal.setText("Máscara decimal: " + mask.calcularMascaraDecimal());
-							labelMascaraBinaria.setText("Máscara binária: " + mask.calcularMascaraBinaria());
-							labelIpsDisponiveis.setText("Total de IPs disponíveis: " + mask.getQuantidadeIps());
-							labelSubRedes.setText("Sub-redes: " + ipInfo.calcularSubRedes());
+						if (testeCidrNumero) {
 
-							labelMensagemErro.setVisible(false);
-							labelIp.setVisible(true);
-							labelCidr.setVisible(true);
-							labelClasse.setVisible(true);
-							labelMascaraDecimal.setVisible(true);
-							labelMascaraBinaria.setVisible(true);
-							labelIpsDisponiveis.setVisible(true);
-							labelSubRedes.setVisible(true);
+							if (Integer.parseInt(textOcteto1.getText()) <= 223) {
+
+								if (Integer.parseInt(textCidr.getText()) >= 1
+										&& Integer.parseInt(textCidr.getText()) <= 32) {
+
+									int teste2 = Integer.parseInt(textOcteto1.getText());
+									int teste3 = Integer.parseInt(textOcteto2.getText());
+									int teste4 = Integer.parseInt(textOcteto3.getText());
+									int teste5 = Integer.parseInt(textOcteto4.getText());
+
+									if (teste2 >= 0 && teste2 <= 255 && teste3 >= 0 && teste3 <= 255 && teste4 >= 0
+											&& teste4 <= 255 && teste5 >= 0 && teste5 <= 255) {
+
+										Ip ipInfo = new Ip();
+										ipInfo.setIp(textOcteto1.getText());
+
+										Mascara mask = new Mascara();
+										mask.setCidr(Integer.parseInt(textCidr.getText()));
+										mask.calcularTotalIps();
+
+										labelIp.setText("IP: " + textOcteto1.getText() + "." + textOcteto2.getText()
+												+ "." + textOcteto3.getText() + "." + textOcteto4.getText());
+										labelCidr.setText("CIDR: " + mask.getCidr());
+										labelClasse.setText("Classe do IP: " + ipInfo.calcularClasse());
+										labelMascaraDecimal
+												.setText("Máscara decimal: " + mask.calcularMascaraDecimal());
+										labelMascaraBinaria
+												.setText("Máscara binária: " + mask.calcularMascaraBinaria());
+										labelIpsDisponiveis
+												.setText("Total de IPs disponíveis: " + mask.getQuantidadeIps());
+										labelSubRedes.setText("Sub-redes: " + ipInfo.calcularSubRedes());
+
+										labelMensagemErro.setVisible(false);
+										labelIp.setVisible(true);
+										labelCidr.setVisible(true);
+										labelClasse.setVisible(true);
+										labelMascaraDecimal.setVisible(true);
+										labelMascaraBinaria.setVisible(true);
+										labelIpsDisponiveis.setVisible(true);
+										labelSubRedes.setVisible(true);
+
+									} else {
+										labelMensagemErro.setText("Os octetos precisam ter números de 0 a 255!");
+										labelMensagemErro.setVisible(true);
+									}
+
+								} else {
+									labelMensagemErro.setText("O CIDR precisa ir de 1 até 32!");
+									labelMensagemErro.setVisible(true);
+								}
+
+							} else {
+								labelMensagemErro.setText("O primeiro octeto do IP precisa ir de 0 até 223!");
+								labelMensagemErro.setVisible(true);
+							}
 
 						} else {
-							labelMensagemErro.setText("Os octetos precisam ter números de 0 a 255!");
+							labelMensagemErro.setText("O CIDR não pode ter letras e nem estar vazio!");
 							labelMensagemErro.setVisible(true);
 						}
 
 					} else {
-						labelMensagemErro.setText("O CIDR não pode ter letras e nem estar vazio!");
+						labelMensagemErro.setText("Os octetos não podem ter letras e nem estar vazios!");
 						labelMensagemErro.setVisible(true);
 					}
 
 				} else {
-					labelMensagemErro.setText("Os octetos não podem ter letras e nem estar vazios!");
+					labelMensagemErro.setText("Não podem ter espaços vazios!");
 					labelMensagemErro.setVisible(true);
 				}
 

@@ -1,7 +1,7 @@
 package br.sp.senai.jandira.model;
 
 public class Mascara {
-	
+
 	private int cidr;
 	private String quantidadeIps;
 
@@ -63,8 +63,7 @@ public class Mascara {
 
 			}
 
-			return valoresOcteto[0] + "." + valoresOcteto[1] + "." + valoresOcteto[2] + "."
-					+ valoresOcteto[3];
+			return valoresOcteto[0] + "." + valoresOcteto[1] + "." + valoresOcteto[2] + "." + valoresOcteto[3];
 
 		} else {
 
@@ -156,8 +155,7 @@ public class Mascara {
 				valoresOcteto[3] = "00000000";
 			}
 
-			return valoresOcteto[0] + " " + valoresOcteto[1] + " " + valoresOcteto[2] + " "
-					+ valoresOcteto[3];
+			return valoresOcteto[0] + " " + valoresOcteto[1] + " " + valoresOcteto[2] + " " + valoresOcteto[3];
 
 		} else {
 
@@ -173,9 +171,8 @@ public class Mascara {
 		if (quantidadeIpsTemp >= 1 && quantidadeIpsTemp <= 30) {
 
 			// é preciso definir a quantidade de ips quando o cidr é 1 pois o máximo que um
-			// tipo int
-			// é capaz de guardar é 2147483647, e acaba dando erro quando vai subtrair 2 dos
-			// ips
+			// tipo int é capaz de guardar é 2147483647, e acaba dando erro quando vai
+			// subtrair 2 dos ips
 			if (quantidadeIpsTemp == 1) {
 				quantidadeIps = "2147483646";
 			}
