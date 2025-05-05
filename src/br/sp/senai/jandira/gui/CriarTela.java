@@ -12,7 +12,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import br.sp.senai.jandira.model.Ip;
-import br.sp.senai.jandira.model.Mascara;
 
 public class CriarTela {
 
@@ -35,12 +34,11 @@ public class CriarTela {
 	private JLabel labelMascaraDecimal;
 	private JLabel labelMascaraBinaria;
 	private JLabel labelIpsDisponiveis;
-	private JLabel labelSubRedes;
 
 	public void criarTela() {
 
 		JFrame tela = new JFrame();
-		tela.setSize(395, 490);
+		tela.setSize(395, 460);
 		tela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		tela.setTitle("Informações da rede");
 
@@ -151,11 +149,6 @@ public class CriarTela {
 		labelIpsDisponiveis.setBounds(20, 360, 460, 30);
 		labelIpsDisponiveis.setFont(new Font("Arial", Font.BOLD, 12));
 
-		labelSubRedes = new JLabel();
-		labelSubRedes.setText("Sub-redes: ");
-		labelSubRedes.setBounds(20, 400, 460, 30);
-		labelSubRedes.setFont(new Font("Arial", Font.BOLD, 12));
-
 		tela.getContentPane().add(labelIpCidr);
 		tela.getContentPane().add(textOcteto1);
 		tela.getContentPane().add(labelPonto1);
@@ -175,7 +168,6 @@ public class CriarTela {
 		tela.getContentPane().add(labelMascaraDecimal);
 		tela.getContentPane().add(labelMascaraBinaria);
 		tela.getContentPane().add(labelIpsDisponiveis);
-		tela.getContentPane().add(labelSubRedes);
 
 		labelIp.setVisible(false);
 		labelCidr.setVisible(false);
@@ -183,7 +175,6 @@ public class CriarTela {
 		labelMascaraDecimal.setVisible(false);
 		labelMascaraBinaria.setVisible(false);
 		labelIpsDisponiveis.setVisible(false);
-		labelSubRedes.setVisible(false);
 		labelMensagemErro.setVisible(false);
 
 		buttonIpInfo.addActionListener(new ActionListener() {
@@ -197,7 +188,6 @@ public class CriarTela {
 				labelMascaraDecimal.setVisible(false);
 				labelMascaraBinaria.setVisible(false);
 				labelIpsDisponiveis.setVisible(false);
-				labelSubRedes.setVisible(false);
 
 				String[] temp = { textOcteto1.getText(), textOcteto2.getText(), textOcteto3.getText(),
 						textOcteto4.getText(), textCidr.getText() };
@@ -229,59 +219,48 @@ public class CriarTela {
 
 						if (testeCidrNumero) {
 
-							if (Integer.parseInt(textOcteto1.getText()) <= 223) {
+							if (Integer.parseInt(textCidr.getText()) >= 1
+									&& Integer.parseInt(textCidr.getText()) <= 32) {
 
-								if (Integer.parseInt(textCidr.getText()) >= 1
-										&& Integer.parseInt(textCidr.getText()) <= 32) {
+								int teste2 = Integer.parseInt(textOcteto1.getText());
+								int teste3 = Integer.parseInt(textOcteto2.getText());
+								int teste4 = Integer.parseInt(textOcteto3.getText());
+								int teste5 = Integer.parseInt(textOcteto4.getText());
 
-									int teste2 = Integer.parseInt(textOcteto1.getText());
-									int teste3 = Integer.parseInt(textOcteto2.getText());
-									int teste4 = Integer.parseInt(textOcteto3.getText());
-									int teste5 = Integer.parseInt(textOcteto4.getText());
+								if (teste2 >= 0 && teste2 <= 255 && teste3 >= 0 && teste3 <= 255 && teste4 >= 0
+										&& teste4 <= 255 && teste5 >= 0 && teste5 <= 255) {
 
-									if (teste2 >= 0 && teste2 <= 255 && teste3 >= 0 && teste3 <= 255 && teste4 >= 0
-											&& teste4 <= 255 && teste5 >= 0 && teste5 <= 255) {
+									Ip ipInfo = new Ip();
+									ipInfo.setIp(textOcteto1.getText());
+									ipInfo.setCidr(Integer.valueOf(textCidr.getText()));
+									ipInfo.calcularClasse();
+									ipInfo.calcularMascaraDecimal();
+									ipInfo.calcularMascaraBinaria();
+									ipInfo.calcularTotalIps();
 
-										Ip ipInfo = new Ip();
-										ipInfo.setIp(textOcteto1.getText());
+									labelIp.setText("IP: " + textOcteto1.getText() + "." + textOcteto2.getText() + "."
+											+ textOcteto3.getText() + "." + textOcteto4.getText());
+									labelCidr.setText("CIDR: " + ipInfo.getCidr());
+									labelClasse.setText("Classe do IP: " + ipInfo.getClasse());
+									labelMascaraDecimal.setText("Máscara decimal: " + ipInfo.getMascaraDecimal());
+									labelMascaraBinaria.setText("Máscara binária: " + ipInfo.getMascaraBinaria());
+									labelIpsDisponiveis.setText("Total de IPs disponíveis: " + ipInfo.getQuantidadeIps());
 
-										Mascara mask = new Mascara();
-										mask.setCidr(Integer.parseInt(textCidr.getText()));
-										mask.calcularTotalIps();
-
-										labelIp.setText("IP: " + textOcteto1.getText() + "." + textOcteto2.getText()
-												+ "." + textOcteto3.getText() + "." + textOcteto4.getText());
-										labelCidr.setText("CIDR: " + mask.getCidr());
-										labelClasse.setText("Classe do IP: " + ipInfo.calcularClasse());
-										labelMascaraDecimal
-												.setText("Máscara decimal: " + mask.calcularMascaraDecimal());
-										labelMascaraBinaria
-												.setText("Máscara binária: " + mask.calcularMascaraBinaria());
-										labelIpsDisponiveis
-												.setText("Total de IPs disponíveis: " + mask.getQuantidadeIps());
-										labelSubRedes.setText("Sub-redes: " + ipInfo.calcularSubRedes());
-
-										labelMensagemErro.setVisible(false);
-										labelIp.setVisible(true);
-										labelCidr.setVisible(true);
-										labelClasse.setVisible(true);
-										labelMascaraDecimal.setVisible(true);
-										labelMascaraBinaria.setVisible(true);
-										labelIpsDisponiveis.setVisible(true);
-										labelSubRedes.setVisible(true);
-
-									} else {
-										labelMensagemErro.setText("Os octetos precisam ter números de 0 a 255!");
-										labelMensagemErro.setVisible(true);
-									}
+									labelMensagemErro.setVisible(false);
+									labelIp.setVisible(true);
+									labelCidr.setVisible(true);
+									labelClasse.setVisible(true);
+									labelMascaraDecimal.setVisible(true);
+									labelMascaraBinaria.setVisible(true);
+									labelIpsDisponiveis.setVisible(true);
 
 								} else {
-									labelMensagemErro.setText("O CIDR precisa ir de 1 até 32!");
+									labelMensagemErro.setText("Os octetos precisam ter números de 0 a 255!");
 									labelMensagemErro.setVisible(true);
 								}
 
 							} else {
-								labelMensagemErro.setText("O primeiro octeto do IP precisa ir de 0 até 223!");
+								labelMensagemErro.setText("O CIDR precisa ir de 1 até 32!");
 								labelMensagemErro.setVisible(true);
 							}
 
@@ -320,7 +299,6 @@ public class CriarTela {
 				labelMascaraDecimal.setVisible(false);
 				labelMascaraBinaria.setVisible(false);
 				labelIpsDisponiveis.setVisible(false);
-				labelSubRedes.setVisible(false);
 
 			}
 		});
