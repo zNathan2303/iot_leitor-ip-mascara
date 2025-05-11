@@ -34,11 +34,12 @@ public class CriarTela {
 	private JLabel labelMascaraDecimal;
 	private JLabel labelMascaraBinaria;
 	private JLabel labelIpsDisponiveis;
+	private JLabel labelSubRedes;
 
 	public void criarTela() {
 
 		JFrame tela = new JFrame();
-		tela.setSize(395, 460);
+		tela.setSize(395, 500);
 		tela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		tela.setTitle("Informações da rede");
 
@@ -148,6 +149,11 @@ public class CriarTela {
 		labelIpsDisponiveis.setText("Total de IPs disponíveis: ");
 		labelIpsDisponiveis.setBounds(20, 360, 460, 30);
 		labelIpsDisponiveis.setFont(new Font("Arial", Font.BOLD, 12));
+		
+		labelSubRedes = new JLabel();
+		labelSubRedes.setText("Sub-redes: ");
+		labelSubRedes.setBounds(20, 400, 460, 30);
+		labelSubRedes.setFont(new Font("Arial", Font.BOLD, 12));
 
 		tela.getContentPane().add(labelIpCidr);
 		tela.getContentPane().add(textOcteto1);
@@ -168,6 +174,7 @@ public class CriarTela {
 		tela.getContentPane().add(labelMascaraDecimal);
 		tela.getContentPane().add(labelMascaraBinaria);
 		tela.getContentPane().add(labelIpsDisponiveis);
+		tela.getContentPane().add(labelSubRedes);
 
 		labelIp.setVisible(false);
 		labelCidr.setVisible(false);
@@ -176,6 +183,7 @@ public class CriarTela {
 		labelMascaraBinaria.setVisible(false);
 		labelIpsDisponiveis.setVisible(false);
 		labelMensagemErro.setVisible(false);
+		labelSubRedes.setVisible(false);
 
 		buttonIpInfo.addActionListener(new ActionListener() {
 
@@ -188,6 +196,7 @@ public class CriarTela {
 				labelMascaraDecimal.setVisible(false);
 				labelMascaraBinaria.setVisible(false);
 				labelIpsDisponiveis.setVisible(false);
+				labelSubRedes.setVisible(false);
 
 				String[] temp = { textOcteto1.getText(), textOcteto2.getText(), textOcteto3.getText(),
 						textOcteto4.getText(), textCidr.getText() };
@@ -237,6 +246,7 @@ public class CriarTela {
 									ipInfo.calcularMascaraDecimal();
 									ipInfo.calcularMascaraBinaria();
 									ipInfo.calcularTotalIps();
+									ipInfo.calcularSubRedes();
 
 									labelIp.setText("IP: " + textOcteto1.getText() + "." + textOcteto2.getText() + "."
 											+ textOcteto3.getText() + "." + textOcteto4.getText());
@@ -245,6 +255,7 @@ public class CriarTela {
 									labelMascaraDecimal.setText("Máscara decimal: " + ipInfo.getMascaraDecimal());
 									labelMascaraBinaria.setText("Máscara binária: " + ipInfo.getMascaraBinaria());
 									labelIpsDisponiveis.setText("Total de IPs disponíveis: " + ipInfo.getQuantidadeIps());
+									labelSubRedes.setText("Sub-redes: " + ipInfo.getSubRedes());
 
 									labelMensagemErro.setVisible(false);
 									labelIp.setVisible(true);
@@ -253,6 +264,7 @@ public class CriarTela {
 									labelMascaraDecimal.setVisible(true);
 									labelMascaraBinaria.setVisible(true);
 									labelIpsDisponiveis.setVisible(true);
+									labelSubRedes.setVisible(true);
 
 								} else {
 									labelMensagemErro.setText("Os octetos precisam ter números de 0 a 255!");

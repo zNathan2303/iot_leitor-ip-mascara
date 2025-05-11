@@ -63,6 +63,13 @@ public class Ip {
 		}
 
 	}
+	
+	public void calcularSubRedes() {
+		
+		int tempCidr = cidr;
+		
+		subRedes = (int) Math.pow(2, 32 - tempCidr);
+	}
 
 
 	public void calcularMascaraDecimal() {
