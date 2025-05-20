@@ -8,9 +8,9 @@ public class Ip {
 	private String mascaraDecimal;
 	private String mascaraBinaria;
 	private String quantidadeIps;
-	private int subRedes;
+	private String subRedes;
 
-	public int getSubRedes() {
+	public String getSubRedes() {
 		return subRedes;
 	}
 
@@ -66,9 +66,21 @@ public class Ip {
 	
 	public void calcularSubRedes() {
 		
-		int tempCidr = cidr;
+		if (cidr < 24) {
+			subRedes = "não implementado cálculo com cidr abaixo de 24";
+		}
 		
-		subRedes = (int) Math.pow(2, 32 - tempCidr);
+		if (cidr == 24) {
+			subRedes = "Tem apenas 1 rede";
+		} else {
+			int bitsInativos = 32 - cidr;
+			int bitsAtivos = 8 - bitsInativos;
+			
+			int numeroDeRede;
+			int numeroDeHost;
+			
+		}
+		
 	}
 
 
