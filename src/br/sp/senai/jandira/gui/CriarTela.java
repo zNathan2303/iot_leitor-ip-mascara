@@ -53,6 +53,8 @@ public class CriarTela {
 
 		tela.setResizable(false);
 
+		Font fonteResultado = new Font("Arial", Font.BOLD, 12);
+
 		labelIpCidr = new JLabel();
 		labelIpCidr.setText("Digite um IP com CIDR (ex: 192.168.0.0/24):");
 		labelIpCidr.setBounds(20, 20, 450, 30);
@@ -120,40 +122,41 @@ public class CriarTela {
 		labelMensagemErro.setHorizontalAlignment(SwingConstants.CENTER);
 		labelMensagemErro.setVerticalAlignment(SwingConstants.CENTER);
 
+		// LABELS DE RESULTADO
 		labelIp = new JLabel();
 		labelIp.setText("IP: ");
 		labelIp.setBounds(20, 160, 460, 30);
-		labelIp.setFont(new Font("Arial", Font.BOLD, 12));
+		labelIp.setFont(fonteResultado);
 
 		labelCidr = new JLabel();
 		labelCidr.setText("CIDR: ");
 		labelCidr.setBounds(20, 200, 460, 30);
-		labelCidr.setFont(new Font("Arial", Font.BOLD, 12));
+		labelCidr.setFont(fonteResultado);
 
 		labelClasse = new JLabel();
 		labelClasse.setText("Classe do IP: ");
 		labelClasse.setBounds(20, 240, 460, 30);
-		labelClasse.setFont(new Font("Arial", Font.BOLD, 12));
+		labelClasse.setFont(fonteResultado);
 
 		labelMascaraDecimal = new JLabel();
 		labelMascaraDecimal.setText("Máscara decimal: ");
 		labelMascaraDecimal.setBounds(20, 280, 460, 30);
-		labelMascaraDecimal.setFont(new Font("Arial", Font.BOLD, 12));
+		labelMascaraDecimal.setFont(fonteResultado);
 
 		labelMascaraBinaria = new JLabel();
 		labelMascaraBinaria.setText("Máscara binária: ");
 		labelMascaraBinaria.setBounds(20, 320, 460, 30);
-		labelMascaraBinaria.setFont(new Font("Arial", Font.BOLD, 12));
+		labelMascaraBinaria.setFont(fonteResultado);
 
 		labelIpsDisponiveis = new JLabel();
 		labelIpsDisponiveis.setText("Total de IPs disponíveis: ");
 		labelIpsDisponiveis.setBounds(20, 360, 460, 30);
-		labelIpsDisponiveis.setFont(new Font("Arial", Font.BOLD, 12));
-		
+		labelIpsDisponiveis.setFont(fonteResultado);
+
 		labelSubRedes = new JLabel();
 		labelSubRedes.setText("Sub-redes: ");
 		labelSubRedes.setBounds(20, 400, 460, 30);
-		labelSubRedes.setFont(new Font("Arial", Font.BOLD, 12));
+		labelSubRedes.setFont(fonteResultado);
 
 		tela.getContentPane().add(labelIpCidr);
 		tela.getContentPane().add(textOcteto1);
@@ -176,42 +179,32 @@ public class CriarTela {
 		tela.getContentPane().add(labelIpsDisponiveis);
 		tela.getContentPane().add(labelSubRedes);
 
-		labelIp.setVisible(false);
-		labelCidr.setVisible(false);
-		labelClasse.setVisible(false);
-		labelMascaraDecimal.setVisible(false);
-		labelMascaraBinaria.setVisible(false);
-		labelIpsDisponiveis.setVisible(false);
-		labelMensagemErro.setVisible(false);
-		labelSubRedes.setVisible(false);
+		// DESATIVA AS LABELS DE RESULTADO POIS O USUARIO NÃO INTERAGIU AINDA
+		ocultarLabels();
 
 		buttonIpInfo.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				labelIp.setVisible(false);
-				labelCidr.setVisible(false);
-				labelClasse.setVisible(false);
-				labelMascaraDecimal.setVisible(false);
-				labelMascaraBinaria.setVisible(false);
-				labelIpsDisponiveis.setVisible(false);
-				labelSubRedes.setVisible(false);
+				// CASO TENHA ALGUMA LABEL DE RESULTADO ATIVA, É DESATIVADA PARA EVITAR
+				// POSSIVEIS PROBLEMAS
+				ocultarLabels();
 
-				String[] temp = { textOcteto1.getText(), textOcteto2.getText(), textOcteto3.getText(),
+				String[] octetosECidr = { textOcteto1.getText(), textOcteto2.getText(), textOcteto3.getText(),
 						textOcteto4.getText(), textCidr.getText() };
 
-				if (temp[0] != null || temp[1] != null || temp[2] != null || temp[3] != null || temp[4] != null) {
+				if (octetosECidr[0] != null || octetosECidr[1] != null || octetosECidr[2] != null
+						|| octetosECidr[3] != null || octetosECidr[4] != null) {
 
 					boolean testeIpNumero;
 
 					try {
-						int teste1 = Integer.parseInt(textOcteto1.getText());
-						int teste2 = Integer.parseInt(textOcteto2.getText());
-						int teste3 = Integer.parseInt(textOcteto3.getText());
-						int teste4 = Integer.parseInt(textOcteto4.getText());
+						int[] octetos = { Integer.parseInt(textOcteto1.getText()),
+								Integer.parseInt(textOcteto2.getText()), Integer.parseInt(textOcteto3.getText()),
+								Integer.parseInt(textOcteto4.getText()) };
 						testeIpNumero = true;
-					} catch (Exception testeNumeroIp) {
+					} catch (Exception erroIpSendoLetra) {
 						testeIpNumero = false;
 					}
 
@@ -220,9 +213,9 @@ public class CriarTela {
 						boolean testeCidrNumero;
 
 						try {
-							int teste5 = Integer.parseInt(textCidr.getText());
+							int cidr = Integer.parseInt(textCidr.getText());
 							testeCidrNumero = true;
-						} catch (Exception testeNumero) {
+						} catch (Exception erroCidrSendoLetra) {
 							testeCidrNumero = false;
 						}
 
@@ -231,13 +224,12 @@ public class CriarTela {
 							if (Integer.parseInt(textCidr.getText()) >= 1
 									&& Integer.parseInt(textCidr.getText()) <= 32) {
 
-								int teste2 = Integer.parseInt(textOcteto1.getText());
-								int teste3 = Integer.parseInt(textOcteto2.getText());
-								int teste4 = Integer.parseInt(textOcteto3.getText());
-								int teste5 = Integer.parseInt(textOcteto4.getText());
+								int[] octetos = { Integer.parseInt(textOcteto1.getText()),
+										Integer.parseInt(textOcteto2.getText()), Integer.parseInt(textOcteto3.getText()),
+										Integer.parseInt(textOcteto4.getText()) };
 
-								if (teste2 >= 0 && teste2 <= 255 && teste3 >= 0 && teste3 <= 255 && teste4 >= 0
-										&& teste4 <= 255 && teste5 >= 0 && teste5 <= 255) {
+								if (octetos[0] >= 0 && octetos[0] <= 255 && octetos[1] >= 0 && octetos[1] <= 255 && octetos[2] >= 0
+										&& octetos[2] <= 255 && octetos[3] >= 0 && octetos[3] <= 255) {
 
 									Ip ipInfo = new Ip();
 									ipInfo.setIp(textOcteto1.getText());
@@ -254,17 +246,12 @@ public class CriarTela {
 									labelClasse.setText("Classe do IP: " + ipInfo.getClasse());
 									labelMascaraDecimal.setText("Máscara decimal: " + ipInfo.getMascaraDecimal());
 									labelMascaraBinaria.setText("Máscara binária: " + ipInfo.getMascaraBinaria());
-									labelIpsDisponiveis.setText("Total de IPs disponíveis: " + ipInfo.getQuantidadeIps());
+									labelIpsDisponiveis
+											.setText("Total de IPs disponíveis: " + ipInfo.getQuantidadeIps());
 									labelSubRedes.setText("Sub-redes: " + ipInfo.getSubRedes());
 
 									labelMensagemErro.setVisible(false);
-									labelIp.setVisible(true);
-									labelCidr.setVisible(true);
-									labelClasse.setVisible(true);
-									labelMascaraDecimal.setVisible(true);
-									labelMascaraBinaria.setVisible(true);
-									labelIpsDisponiveis.setVisible(true);
-									labelSubRedes.setVisible(true);
+									mostrarLabels();
 
 								} else {
 									labelMensagemErro.setText("Os octetos precisam ter números de 0 a 255!");
@@ -299,24 +286,41 @@ public class CriarTela {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
+				// LIMPA OS VALORES DA TELA E A MENSAGEM DE ERRO
 				textOcteto1.setText(null);
 				textOcteto2.setText(null);
 				textOcteto3.setText(null);
 				textOcteto4.setText(null);
 				textCidr.setText(null);
 				labelMensagemErro.setText(null);
-				labelIp.setVisible(false);
-				labelCidr.setVisible(false);
-				labelClasse.setVisible(false);
-				labelMascaraDecimal.setVisible(false);
-				labelMascaraBinaria.setVisible(false);
-				labelIpsDisponiveis.setVisible(false);
+
+				ocultarLabels();
 
 			}
 		});
 
 		tela.setVisible(true);
 
+	}
+
+	private void mostrarLabels() {
+		labelIp.setVisible(true);
+		labelCidr.setVisible(true);
+		labelClasse.setVisible(true);
+		labelMascaraDecimal.setVisible(true);
+		labelMascaraBinaria.setVisible(true);
+		labelIpsDisponiveis.setVisible(true);
+		labelSubRedes.setVisible(true);
+	}
+
+	private void ocultarLabels() {
+		labelIp.setVisible(false);
+		labelCidr.setVisible(false);
+		labelClasse.setVisible(false);
+		labelMascaraDecimal.setVisible(false);
+		labelMascaraBinaria.setVisible(false);
+		labelIpsDisponiveis.setVisible(false);
+		labelSubRedes.setVisible(false);
 	}
 
 }

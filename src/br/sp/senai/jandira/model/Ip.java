@@ -63,26 +63,38 @@ public class Ip {
 		}
 
 	}
-	
+
 	public void calcularSubRedes() {
-		
+
 		if (cidr < 24) {
 			subRedes = "não implementado cálculo com cidr abaixo de 24";
 		}
-		
+
 		if (cidr == 24) {
-			subRedes = "Tem apenas 1 rede";
-		} else {
-			int bitsInativos = 32 - cidr;
-			int bitsAtivos = 8 - bitsInativos;
-			
-			int numeroDeRede;
-			int numeroDeHost;
-			
+			subRedes = "Não há sub-redes";
 		}
 		
-	}
+		if (cidr > 24) {
+			int bitsInativos = 32 - cidr;
+			int bitsAtivos = 8 - bitsInativos;
 
+			int numeroDeRede = (int) Math.pow(2, bitsAtivos);
+			int numeroDeHost = ((int) Math.pow(2, bitsInativos)) - 2;
+
+			int[] binario = { 128, 64, 32, 16, 8, 4, 2, 1 };
+			int salto = 0;
+
+			for (int i = 0; i < bitsAtivos; i++) {
+				salto += binario[i];
+			}
+
+			salto = 256 - salto;
+
+			subRedes = "Há " + String.valueOf(numeroDeRede) + " sub-redes!";
+
+		}
+
+	}
 
 	public void calcularMascaraDecimal() {
 
@@ -139,8 +151,6 @@ public class Ip {
 
 	public void calcularMascaraBinaria() {
 
-		Ip primeiroOcteto = new Ip();
-
 		int[] octeto = { 0, 0, 0, 0 };
 		String[] valoresOcteto = { "", "", "", "" };
 		int contador = 0;
@@ -180,7 +190,7 @@ public class Ip {
 				octeto[contador]--;
 
 				if (octeto[0] == 0) {
-					primeiroOcteto.setIp(valorBinario);
+					ip = valorBinario;
 				}
 
 				// passagem para o próximo octeto
