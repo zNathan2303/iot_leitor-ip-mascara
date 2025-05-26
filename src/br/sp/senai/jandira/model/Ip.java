@@ -1,5 +1,7 @@
 package br.sp.senai.jandira.model;
 
+import java.util.Iterator;
+
 public class Ip {
 
 	private String ip;
@@ -48,7 +50,8 @@ public class Ip {
 
 	public void calcularClasse() {
 
-		int primeiroOcteto = Integer.parseInt(ip);
+		String[] octetos = ip.split("\\.");
+		int primeiroOcteto = Integer.parseInt(octetos[0]);;
 
 		if (primeiroOcteto >= 0 && primeiroOcteto <= 127) {
 			classe = "Classe A";
@@ -91,6 +94,33 @@ public class Ip {
 			salto = 256 - salto;
 
 			subRedes = "Há " + String.valueOf(numeroDeRede) + " sub-redes!";
+			System.out.println("sub-rede, IP da sub-rede, intervalo de hosts, IP de broadcast");
+			int identificadorHost = 0;
+			String[] octetos = ip.split("\\.");
+			String rede = octetos[0] + "." + octetos[1] + "." + octetos[2] + ".";
+			
+			for (int i = 1; i <= numeroDeRede; i++) {
+				
+				System.out.print(i);
+				System.out.print(", ");
+				
+				System.out.print(rede + identificadorHost);
+				System.out.print(", ");
+				
+				identificadorHost++;
+				System.out.print(rede + identificadorHost);
+				identificadorHost--;
+				System.out.print(" - ");
+				identificadorHost += numeroDeHost;
+				System.out.print(rede + identificadorHost);
+				System.out.print(", ");
+				
+				identificadorHost++;
+				System.out.println(rede + identificadorHost);
+				
+				identificadorHost++;
+				
+			}
 
 		}
 
@@ -188,10 +218,6 @@ public class Ip {
 
 				valorBinario = valorBinario + "1";
 				octeto[contador]--;
-
-				if (octeto[0] == 0) {
-					ip = valorBinario;
-				}
 
 				// passagem para o próximo octeto
 				if (octeto[contador] == 0) {

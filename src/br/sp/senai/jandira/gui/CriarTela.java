@@ -225,14 +225,16 @@ public class CriarTela {
 									&& Integer.parseInt(textCidr.getText()) <= 32) {
 
 								int[] octetos = { Integer.parseInt(textOcteto1.getText()),
-										Integer.parseInt(textOcteto2.getText()), Integer.parseInt(textOcteto3.getText()),
+										Integer.parseInt(textOcteto2.getText()),
+										Integer.parseInt(textOcteto3.getText()),
 										Integer.parseInt(textOcteto4.getText()) };
 
-								if (octetos[0] >= 0 && octetos[0] <= 255 && octetos[1] >= 0 && octetos[1] <= 255 && octetos[2] >= 0
-										&& octetos[2] <= 255 && octetos[3] >= 0 && octetos[3] <= 255) {
+								if (octetos[0] >= 0 && octetos[0] <= 255 && octetos[1] >= 0 && octetos[1] <= 255
+										&& octetos[2] >= 0 && octetos[2] <= 255 && octetos[3] >= 0
+										&& octetos[3] <= 255) {
 
 									Ip ipInfo = new Ip();
-									ipInfo.setIp(textOcteto1.getText());
+									ipInfo.setIp(textOcteto1.getText() + "." + textOcteto2.getText() + "." + textOcteto3.getText() + "." + textOcteto4.getText());
 									ipInfo.setCidr(Integer.valueOf(textCidr.getText()));
 									ipInfo.calcularClasse();
 									ipInfo.calcularMascaraDecimal();
