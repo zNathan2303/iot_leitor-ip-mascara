@@ -2,6 +2,8 @@ package br.sp.senai.jandira.model;
 
 import java.util.Iterator;
 
+import javax.swing.JList;
+
 public class Ip {
 
 	private String ip;
@@ -67,7 +69,7 @@ public class Ip {
 
 	}
 
-	public void calcularSubRedes() {
+	public JList<String> calcularSubRedes() {
 
 		if (cidr < 24) {
 			subRedes = "não implementado cálculo com cidr abaixo de 24";
@@ -94,29 +96,22 @@ public class Ip {
 			salto = 256 - salto;
 
 			subRedes = "Há " + String.valueOf(numeroDeRede) + " sub-redes!";
-			System.out.println("sub-rede, IP da sub-rede, intervalo de hosts, IP de broadcast");
 			int identificadorHost = 0;
 			String[] octetos = ip.split("\\.");
 			String rede = octetos[0] + "." + octetos[1] + "." + octetos[2] + ".";
 			
 			for (int i = 1; i <= numeroDeRede; i++) {
 				
-				System.out.print(i);
-				System.out.print(", ");
-				
-				System.out.print(rede + identificadorHost);
-				System.out.print(", ");
-				
+				return "sub-rede: " + i;
+				System.out.println("IP da sub-rede: " + rede + identificadorHost);
 				identificadorHost++;
-				System.out.print(rede + identificadorHost);
+				System.out.print("intervalo de hosts: " + rede + identificadorHost + " - ");
 				identificadorHost--;
-				System.out.print(" - ");
 				identificadorHost += numeroDeHost;
-				System.out.print(rede + identificadorHost);
-				System.out.print(", ");
-				
-				identificadorHost++;
 				System.out.println(rede + identificadorHost);
+				identificadorHost++;
+				System.out.println("IP de broadcast: " + rede + identificadorHost);
+				System.out.println("-------------------------------");
 				
 				identificadorHost++;
 				

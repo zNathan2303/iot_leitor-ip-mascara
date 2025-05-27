@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
@@ -35,11 +36,12 @@ public class CriarTela {
 	private JLabel labelMascaraBinaria;
 	private JLabel labelIpsDisponiveis;
 	private JLabel labelSubRedes;
+	private JList listaSubredes;
 
 	public void criarTela() {
 
 		JFrame tela = new JFrame();
-		tela.setSize(395, 500);
+		tela.setSize(395, 800);
 		tela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		tela.setTitle("Informações da rede");
 
@@ -157,6 +159,9 @@ public class CriarTela {
 		labelSubRedes.setText("Sub-redes: ");
 		labelSubRedes.setBounds(20, 400, 460, 30);
 		labelSubRedes.setFont(fonteResultado);
+		
+		listaSubredes = new JList();
+		listaSubredes.setBounds(20, 440, 340, 300);
 
 		tela.getContentPane().add(labelIpCidr);
 		tela.getContentPane().add(textOcteto1);
@@ -178,6 +183,7 @@ public class CriarTela {
 		tela.getContentPane().add(labelMascaraBinaria);
 		tela.getContentPane().add(labelIpsDisponiveis);
 		tela.getContentPane().add(labelSubRedes);
+		tela.getContentPane().add(listaSubredes);
 
 		// DESATIVA AS LABELS DE RESULTADO POIS O USUARIO NÃO INTERAGIU AINDA
 		ocultarLabels();
@@ -313,6 +319,7 @@ public class CriarTela {
 		labelMascaraBinaria.setVisible(true);
 		labelIpsDisponiveis.setVisible(true);
 		labelSubRedes.setVisible(true);
+		listaSubredes.setVisible(true);
 	}
 
 	private void ocultarLabels() {
@@ -323,6 +330,7 @@ public class CriarTela {
 		labelMascaraBinaria.setVisible(false);
 		labelIpsDisponiveis.setVisible(false);
 		labelSubRedes.setVisible(false);
+		listaSubredes.setVisible(false);
 	}
 
 }
