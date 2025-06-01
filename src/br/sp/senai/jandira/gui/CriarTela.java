@@ -5,10 +5,12 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
@@ -37,6 +39,7 @@ public class CriarTela {
 	private JLabel labelIpsDisponiveis;
 	private JLabel labelSubRedes;
 	private JList listaSubredes;
+	private JScrollPane scrollSubRedes;
 
 	public void criarTela() {
 
@@ -160,8 +163,12 @@ public class CriarTela {
 		labelSubRedes.setBounds(20, 400, 460, 30);
 		labelSubRedes.setFont(fonteResultado);
 		
-		listaSubredes = new JList();
-		listaSubredes.setBounds(20, 440, 340, 300);
+		// LISTA ONDE IRÁ MOSTRAR AS SUB-REDES
+		DefaultListModel<String> modeloLista = new DefaultListModel<>();
+		listaSubredes = new JList<>(modeloLista);
+		
+		scrollSubRedes = new JScrollPane(listaSubredes);
+		scrollSubRedes.setBounds(20, 440, 340, 300);
 
 		tela.getContentPane().add(labelIpCidr);
 		tela.getContentPane().add(textOcteto1);
@@ -183,7 +190,7 @@ public class CriarTela {
 		tela.getContentPane().add(labelMascaraBinaria);
 		tela.getContentPane().add(labelIpsDisponiveis);
 		tela.getContentPane().add(labelSubRedes);
-		tela.getContentPane().add(listaSubredes);
+		tela.getContentPane().add(scrollSubRedes);
 
 		// DESATIVA AS LABELS DE RESULTADO POIS O USUARIO NÃO INTERAGIU AINDA
 		ocultarLabels();
@@ -257,6 +264,10 @@ public class CriarTela {
 									labelIpsDisponiveis
 											.setText("Total de IPs disponíveis: " + ipInfo.getQuantidadeIps());
 									labelSubRedes.setText("Sub-redes: " + ipInfo.getSubRedes());
+									
+									for (String subrede : ipInfo.getListaSubRedes()) {
+										modeloLista.addElement(subrede);
+									}
 
 									labelMensagemErro.setVisible(false);
 									mostrarLabels();
@@ -320,6 +331,7 @@ public class CriarTela {
 		labelIpsDisponiveis.setVisible(true);
 		labelSubRedes.setVisible(true);
 		listaSubredes.setVisible(true);
+		scrollSubRedes.setVisible(true);
 	}
 
 	private void ocultarLabels() {
@@ -331,6 +343,7 @@ public class CriarTela {
 		labelIpsDisponiveis.setVisible(false);
 		labelSubRedes.setVisible(false);
 		listaSubredes.setVisible(false);
+		scrollSubRedes.setVisible(false);
 	}
 
 }

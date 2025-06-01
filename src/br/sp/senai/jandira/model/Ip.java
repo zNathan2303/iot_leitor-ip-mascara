@@ -1,8 +1,7 @@
 package br.sp.senai.jandira.model;
 
-import java.util.Iterator;
-
-import javax.swing.JList;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Ip {
 
@@ -13,6 +12,11 @@ public class Ip {
 	private String mascaraBinaria;
 	private String quantidadeIps;
 	private String subRedes;
+	private List<String> listaSubRedes = new ArrayList<>();
+
+	public List<String> getListaSubRedes() {
+		return listaSubRedes;
+	}
 
 	public String getSubRedes() {
 		return subRedes;
@@ -53,7 +57,8 @@ public class Ip {
 	public void calcularClasse() {
 
 		String[] octetos = ip.split("\\.");
-		int primeiroOcteto = Integer.parseInt(octetos[0]);;
+		int primeiroOcteto = Integer.parseInt(octetos[0]);
+		;
 
 		if (primeiroOcteto >= 0 && primeiroOcteto <= 127) {
 			classe = "Classe A";
@@ -69,7 +74,7 @@ public class Ip {
 
 	}
 
-	public JList<String> calcularSubRedes() {
+	public void calcularSubRedes() {
 
 		if (cidr < 24) {
 			subRedes = "não implementado cálculo com cidr abaixo de 24";
@@ -78,7 +83,7 @@ public class Ip {
 		if (cidr == 24) {
 			subRedes = "Não há sub-redes";
 		}
-		
+
 		if (cidr > 24) {
 			int bitsInativos = 32 - cidr;
 			int bitsAtivos = 8 - bitsInativos;
@@ -87,6 +92,8 @@ public class Ip {
 			int numeroDeHost = ((int) Math.pow(2, bitsInativos)) - 2;
 
 			int[] binario = { 128, 64, 32, 16, 8, 4, 2, 1 };
+
+			// Cálculo do salto, porém não foi usado
 			int salto = 0;
 
 			for (int i = 0; i < bitsAtivos; i++) {
@@ -95,26 +102,31 @@ public class Ip {
 
 			salto = 256 - salto;
 
+			// Estrutura que irá passar para o label de sub-redes da tela gráfica a
+			// quantidade de sub-redes existentes
 			subRedes = "Há " + String.valueOf(numeroDeRede) + " sub-redes!";
+			
+			// Estrutura responsável por atribuir as informações de sub-redes para a lista,
+			// que será mandada para o JList da classe responsável por criar a tela gráfica
 			int identificadorHost = 0;
 			String[] octetos = ip.split("\\.");
 			String rede = octetos[0] + "." + octetos[1] + "." + octetos[2] + ".";
-			
+			String intervalo;
 			for (int i = 1; i <= numeroDeRede; i++) {
-				
-				return "sub-rede: " + i;
-				System.out.println("IP da sub-rede: " + rede + identificadorHost);
+
+				listaSubRedes.add("Sub-rede: " + i);
+				listaSubRedes.add("IP da sub-rede: " + rede + identificadorHost);
 				identificadorHost++;
-				System.out.print("intervalo de hosts: " + rede + identificadorHost + " - ");
+				intervalo = "Intervalo de hosts: " + rede + identificadorHost + " - ";
 				identificadorHost--;
 				identificadorHost += numeroDeHost;
-				System.out.println(rede + identificadorHost);
+				intervalo += rede + identificadorHost;
+				listaSubRedes.add(intervalo);
 				identificadorHost++;
-				System.out.println("IP de broadcast: " + rede + identificadorHost);
-				System.out.println("-------------------------------");
-				
+				listaSubRedes.add("IP de broadcast: " + rede + identificadorHost);
+				listaSubRedes.add("----------------------------------------------------------------------------");
 				identificadorHost++;
-				
+
 			}
 
 		}
