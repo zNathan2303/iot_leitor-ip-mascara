@@ -162,11 +162,17 @@ public class CriarTela {
 		labelSubRedes.setText("Sub-redes: ");
 		labelSubRedes.setBounds(20, 400, 460, 30);
 		labelSubRedes.setFont(fonteResultado);
-		
-		// LISTA ONDE IRÁ MOSTRAR AS SUB-REDES
+
+		// Criação do modelo de lista que é necessário para atribuir informações de
+		// forma indireta para o JList, já que não é possível colocá-las diretamente
+		// nele
 		DefaultListModel<String> modeloLista = new DefaultListModel<>();
+		// Cria e associa o JList ao modelo de lista criado anteriormente, para que tudo
+		// dentro do modelo apareça diretamente no JList
 		listaSubredes = new JList<>(modeloLista);
-		
+		// Coloca a JList dentro de um painel com rolagem, para que caso ela fique muito
+		// grande possa ter um scroll para visualizar as informações que passarem dos
+		// limites dela
 		scrollSubRedes = new JScrollPane(listaSubredes);
 		scrollSubRedes.setBounds(20, 440, 340, 300);
 
@@ -192,7 +198,7 @@ public class CriarTela {
 		tela.getContentPane().add(labelSubRedes);
 		tela.getContentPane().add(scrollSubRedes);
 
-		// DESATIVA AS LABELS DE RESULTADO POIS O USUARIO NÃO INTERAGIU AINDA
+		// Desativa as labels de resultado pois não há informações para serem exibidas
 		ocultarLabels();
 
 		buttonIpInfo.addActionListener(new ActionListener() {
@@ -200,100 +206,79 @@ public class CriarTela {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				// CASO TENHA ALGUMA LABEL DE RESULTADO ATIVA, É DESATIVADA PARA EVITAR
-				// POSSIVEIS PROBLEMAS
+				// Caso tenha alguma label de resultado ativa, é desativada para evitar
+				// possíveis erros caso o usuário insira novas informações que estejam erradas
 				ocultarLabels();
 
-				String[] octetosECidr = { textOcteto1.getText(), textOcteto2.getText(), textOcteto3.getText(),
+				// Criação da classe responsável por validar os dados inseridos pelo usuário
+				ValidadorIp validador = new ValidadorIp();
+
+				String[] stringOctetosIp = { textOcteto1.getText(), textOcteto2.getText(), textOcteto3.getText(),
 						textOcteto4.getText(), textCidr.getText() };
 
-				if (octetosECidr[0] != null || octetosECidr[1] != null || octetosECidr[2] != null
-						|| octetosECidr[3] != null || octetosECidr[4] != null) {
+				String stringCidr = textCidr.getText();
 
-					boolean testeIpNumero;
+				// Verifica se os campos estão vazios antes de passar para as próximas
+				// verificações de valores
+				if (validador.verificarCampos(stringOctetosIp[0], stringOctetosIp[1], stringOctetosIp[2],
+						stringOctetosIp[3], stringCidr)) {
 
-					try {
-						int[] octetos = { Integer.parseInt(textOcteto1.getText()),
-								Integer.parseInt(textOcteto2.getText()), Integer.parseInt(textOcteto3.getText()),
-								Integer.parseInt(textOcteto4.getText()) };
-						testeIpNumero = true;
-					} catch (Exception erroIpSendoLetra) {
-						testeIpNumero = false;
-					}
+					// Método que retornará verdadeiro ou falso dependendo se os valores
+					// inseridos pelo usuário podem ser transformar em números
+					if (validador.verificarExistenciaDeNumeros(stringOctetosIp[0], stringOctetosIp[1],
+							stringOctetosIp[2], stringOctetosIp[3], stringCidr)) {
 
-					if (testeIpNumero) {
+						// Método responsável por verificar se o cidr está entre 1 e 32
+						if (validador.validarCidr()) {
 
-						boolean testeCidrNumero;
+							// Método responsável por verificar se todos os campos do IP estão entre os
+							// valores 0 e 255
+							if (validador.validarIp()) {
 
-						try {
-							int cidr = Integer.parseInt(textCidr.getText());
-							testeCidrNumero = true;
-						} catch (Exception erroCidrSendoLetra) {
-							testeCidrNumero = false;
-						}
+								Ip ipInfo = new Ip();
+								ipInfo.setIp(stringOctetosIp[0] + "." + stringOctetosIp[1] + "." + stringOctetosIp[2]
+										+ "." + stringOctetosIp[3]);
+								ipInfo.setCidr(Integer.valueOf(stringCidr));
+								ipInfo.calcularClasse();
+								ipInfo.calcularMascaraDecimal();
+								ipInfo.calcularMascaraBinaria();
+								ipInfo.calcularTotalIps();
+								ipInfo.calcularSubRedes();
 
-						if (testeCidrNumero) {
+								labelIp.setText("IP: " + ipInfo.getIp());
+								labelCidr.setText("CIDR: " + ipInfo.getCidr());
+								labelClasse.setText("Classe do IP: " + ipInfo.getClasse());
+								labelMascaraDecimal.setText("Máscara decimal: " + ipInfo.getMascaraDecimal());
+								labelMascaraBinaria.setText("Máscara binária: " + ipInfo.getMascaraBinaria());
+								labelIpsDisponiveis.setText("Total de IPs disponíveis: " + ipInfo.getQuantidadeIps());
+								labelSubRedes.setText("Sub-redes: " + ipInfo.getSubRedes());
 
-							if (Integer.parseInt(textCidr.getText()) >= 1
-									&& Integer.parseInt(textCidr.getText()) <= 32) {
+								modeloLista.clear();
 
-								int[] octetos = { Integer.parseInt(textOcteto1.getText()),
-										Integer.parseInt(textOcteto2.getText()),
-										Integer.parseInt(textOcteto3.getText()),
-										Integer.parseInt(textOcteto4.getText()) };
-
-								if (octetos[0] >= 0 && octetos[0] <= 255 && octetos[1] >= 0 && octetos[1] <= 255
-										&& octetos[2] >= 0 && octetos[2] <= 255 && octetos[3] >= 0
-										&& octetos[3] <= 255) {
-
-									Ip ipInfo = new Ip();
-									ipInfo.setIp(textOcteto1.getText() + "." + textOcteto2.getText() + "." + textOcteto3.getText() + "." + textOcteto4.getText());
-									ipInfo.setCidr(Integer.valueOf(textCidr.getText()));
-									ipInfo.calcularClasse();
-									ipInfo.calcularMascaraDecimal();
-									ipInfo.calcularMascaraBinaria();
-									ipInfo.calcularTotalIps();
-									ipInfo.calcularSubRedes();
-
-									labelIp.setText("IP: " + textOcteto1.getText() + "." + textOcteto2.getText() + "."
-											+ textOcteto3.getText() + "." + textOcteto4.getText());
-									labelCidr.setText("CIDR: " + ipInfo.getCidr());
-									labelClasse.setText("Classe do IP: " + ipInfo.getClasse());
-									labelMascaraDecimal.setText("Máscara decimal: " + ipInfo.getMascaraDecimal());
-									labelMascaraBinaria.setText("Máscara binária: " + ipInfo.getMascaraBinaria());
-									labelIpsDisponiveis
-											.setText("Total de IPs disponíveis: " + ipInfo.getQuantidadeIps());
-									labelSubRedes.setText("Sub-redes: " + ipInfo.getSubRedes());
-									
-									for (String subrede : ipInfo.getListaSubRedes()) {
-										modeloLista.addElement(subrede);
-									}
-
-									labelMensagemErro.setVisible(false);
-									mostrarLabels();
-
-								} else {
-									labelMensagemErro.setText("Os octetos precisam ter números de 0 a 255!");
-									labelMensagemErro.setVisible(true);
+								for (String subrede : ipInfo.getListaSubRedes()) {
+									modeloLista.addElement(subrede);
 								}
 
+								labelMensagemErro.setVisible(false);
+								mostrarLabels();
+
 							} else {
-								labelMensagemErro.setText("O CIDR precisa ir de 1 até 32!");
+								labelMensagemErro.setText("Os octetos precisam ter números de 0 a 255!");
 								labelMensagemErro.setVisible(true);
 							}
 
 						} else {
-							labelMensagemErro.setText("O CIDR não pode ter letras e nem estar vazio!");
+							labelMensagemErro.setText("O CIDR precisa ir de 1 até 30!");
 							labelMensagemErro.setVisible(true);
 						}
 
 					} else {
-						labelMensagemErro.setText("Os octetos não podem ter letras e nem estar vazios!");
+						labelMensagemErro.setText("Os campos só podem ter números!");
 						labelMensagemErro.setVisible(true);
 					}
 
 				} else {
-					labelMensagemErro.setText("Não podem ter espaços vazios!");
+					labelMensagemErro.setText("Não pode ter campos vazios!");
 					labelMensagemErro.setVisible(true);
 				}
 
@@ -305,7 +290,7 @@ public class CriarTela {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				// LIMPA OS VALORES DA TELA E A MENSAGEM DE ERRO
+				// Limpa os campos e tira a mensagem de erro
 				textOcteto1.setText(null);
 				textOcteto2.setText(null);
 				textOcteto3.setText(null);

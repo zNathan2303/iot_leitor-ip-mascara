@@ -105,13 +105,16 @@ public class Ip {
 			// Estrutura que irá passar para o label de sub-redes da tela gráfica a
 			// quantidade de sub-redes existentes
 			subRedes = "Há " + String.valueOf(numeroDeRede) + " sub-redes!";
-			
+
 			// Estrutura responsável por atribuir as informações de sub-redes para a lista,
 			// que será mandada para o JList da classe responsável por criar a tela gráfica
 			int identificadorHost = 0;
 			String[] octetos = ip.split("\\.");
 			String rede = octetos[0] + "." + octetos[1] + "." + octetos[2] + ".";
 			String intervalo;
+			
+			listaSubRedes.clear();
+			
 			for (int i = 1; i <= numeroDeRede; i++) {
 
 				listaSubRedes.add("Sub-rede: " + i);
@@ -278,20 +281,21 @@ public class Ip {
 	public void calcularTotalIps() {
 
 		int quantidadeIpsTemp = cidr;
-		if (quantidadeIpsTemp >= 1 && quantidadeIpsTemp <= 30) {
 
-			// é preciso definir a quantidade de ips quando o cidr é 1 pois o máximo que um
-			// tipo int é capaz de guardar é 2147483647, e acaba dando erro quando vai
-			// subtrair 2 dos ips
-			if (quantidadeIpsTemp == 1) {
-				quantidadeIps = "2147483646";
-			}
+		// é preciso definir a quantidade de ips quando o cidr é 1 pois o máximo que um
+		// tipo int é capaz de guardar é 2147483647, e acaba dando erro quando vai
+		// subtrair 2 dos ips
+		if (quantidadeIpsTemp == 1) {
+			quantidadeIps = "2147483646";
+		}
 
-			// para ter ips disponiveis, o cidr precisa ser no máximo de 30
-			if (quantidadeIpsTemp > 1 && quantidadeIpsTemp <= 30) {
-				quantidadeIps = String.valueOf((int) Math.pow(2, 32 - quantidadeIpsTemp) - 2);
-			}
+		// para ter ips disponiveis, o cidr precisa ser no máximo de 30
+		if (quantidadeIpsTemp > 1 && quantidadeIpsTemp <= 30) {
+			quantidadeIps = String.valueOf((int) Math.pow(2, 32 - quantidadeIpsTemp) - 2);
+		}
 
+		if (quantidadeIpsTemp > 30) {
+			quantidadeIps = "Não há IPs disponíveis";
 		}
 
 	}
