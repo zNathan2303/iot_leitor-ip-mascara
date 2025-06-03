@@ -44,7 +44,7 @@ public class CriarTela {
 	public void criarTela() {
 
 		JFrame tela = new JFrame();
-		tela.setSize(395, 800);
+		tela.setSize(395, 500);
 		tela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		tela.setTitle("Informações da rede");
 
@@ -200,6 +200,8 @@ public class CriarTela {
 
 		// Desativa as labels de resultado pois não há informações para serem exibidas
 		ocultarLabels();
+		scrollSubRedes.setVisible(false);
+		listaSubredes.setVisible(false);
 
 		buttonIpInfo.addActionListener(new ActionListener() {
 
@@ -209,6 +211,8 @@ public class CriarTela {
 				// Caso tenha alguma label de resultado ativa, é desativada para evitar
 				// possíveis erros caso o usuário insira novas informações que estejam erradas
 				ocultarLabels();
+				scrollSubRedes.setVisible(false);
+				listaSubredes.setVisible(false);
 
 				// Criação da classe responsável por validar os dados inseridos pelo usuário
 				ValidadorIp validador = new ValidadorIp();
@@ -255,12 +259,20 @@ public class CriarTela {
 
 								modeloLista.clear();
 
-								for (String subrede : ipInfo.getListaSubRedes()) {
-									modeloLista.addElement(subrede);
-								}
-
 								labelMensagemErro.setVisible(false);
 								mostrarLabels();
+
+								if (Integer.parseInt(stringCidr) > 24) {
+									for (String subrede : ipInfo.getListaSubRedes()) {
+										modeloLista.addElement(subrede);
+									}
+
+									scrollSubRedes.setVisible(true);
+									listaSubredes.setVisible(true);
+
+									tela.setSize(395, 800);
+									tela.setLocationRelativeTo(null);
+								}
 
 							} else {
 								labelMensagemErro.setText("Os octetos precisam ter números de 0 a 255!");
@@ -298,8 +310,11 @@ public class CriarTela {
 				textCidr.setText(null);
 				labelMensagemErro.setText(null);
 
+				tela.setSize(395, 500);
+				tela.setLocationRelativeTo(null);
 				ocultarLabels();
-
+				scrollSubRedes.setVisible(false);
+				listaSubredes.setVisible(false);
 			}
 		});
 
@@ -315,8 +330,6 @@ public class CriarTela {
 		labelMascaraBinaria.setVisible(true);
 		labelIpsDisponiveis.setVisible(true);
 		labelSubRedes.setVisible(true);
-		listaSubredes.setVisible(true);
-		scrollSubRedes.setVisible(true);
 	}
 
 	private void ocultarLabels() {
@@ -327,8 +340,6 @@ public class CriarTela {
 		labelMascaraBinaria.setVisible(false);
 		labelIpsDisponiveis.setVisible(false);
 		labelSubRedes.setVisible(false);
-		listaSubredes.setVisible(false);
-		scrollSubRedes.setVisible(false);
 	}
 
 }
